@@ -8,10 +8,8 @@ class CreatePlayers < ActiveRecord::Migration
       t.integer :birthdate
       t.integer :position,default:0
       t.integer :status,default:0
-      t.references :team, index: true
-
+      t.references :team, index: true,foreign_key: true
       t.timestamps null: false
     end
-    add_foreign_key :players, :teams
   end
 end

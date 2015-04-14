@@ -1,28 +1,6 @@
-class PlayersController < ApplicationController
+class PlayersController < APIController
 
-  ActionController::Parameters.action_on_unpermitted_parameters = :raise
-
-  rescue_from(ActionController::ParameterMissing) do |parameter_missing_exception|
-    response = {message:"parameter "+ parameter_missing_exception.to_s}
-    respond_to do |format|
-      format.json { render json: response, status: :bad_request}
-    end
-  end
-
-  rescue_from(ActionController::UnpermittedParameters) do |non_permited_parameter_exception|
-    response = {message:non_permited_parameter_exception.to_s}
-    respond_to do |format|
-      format.json { render json: response, status: :bad_request}
-    end
-  end
-
-  rescue_from(ActiveRecord::RecordNotFound) do
-    response = {message:"player not found"};
-    respond_to do |format|
-      format.json { render json: response, status: :bad_request}
-    end
-  end
-
+  before_action :set_player, only: [:show,:update,:destroy]
 
   def index
     render json: Player.all
@@ -34,15 +12,16 @@ class PlayersController < ApplicationController
       render json: @player
     else
       render json: @player.errors
+      # TODO test sending the player alone and see if it goes with errors ans ember detects this
     end
   end
 
+
   def show
-    render json:Player.find(params[:id])
+    render json:@player
   end
 
   def update
-    @player=Player.find(params[:id])
     if @player.update(player_param)
       render json:@player
     else
@@ -52,12 +31,16 @@ class PlayersController < ApplicationController
   end
 
   def destroy
-    @player=Player.find(params[:id])
     @player.destroy
     render json: nil, status: :ok
   end
 
   private
+
+  def set_player
+    @player = Player.find(params[:id])
+  end
+
   def player_param
     params.require(:player).permit(:name,:age,:lastname,:salary,:birthdate,:position,:status,:team_id);
   end
