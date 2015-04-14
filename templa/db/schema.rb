@@ -13,20 +13,23 @@
 
 ActiveRecord::Schema.define(version: 20150413230925) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "players", force: :cascade do |t|
     t.string   "name"
     t.integer  "age"
     t.string   "lastname"
     t.integer  "salary"
     t.integer  "birthdate"
-    t.integer  "position"
-    t.integer  "status"
+    t.integer  "position",   default: 0
+    t.integer  "status",     default: 0
     t.integer  "team_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  add_index "players", ["team_id"], name: "index_players_on_team_id"
+  add_index "players", ["team_id"], name: "index_players_on_team_id", using: :btree
 
   create_table "teams", force: :cascade do |t|
     t.string   "name"
@@ -36,4 +39,5 @@ ActiveRecord::Schema.define(version: 20150413230925) do
     t.datetime "updated_at",    null: false
   end
 
+  add_foreign_key "players", "teams"
 end
