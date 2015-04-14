@@ -32,7 +32,7 @@ class TeamsController < ApplicationController
     if @team.save
       render json: @team
     else
-      render json: @team.errors
+      render json: @team.errors, status: :bad_request
     end
   end
 
@@ -43,7 +43,7 @@ class TeamsController < ApplicationController
   def update
     @team=Team.find(params[:id])
     if @team.update(teams_param)
-      render json:@team.update(teams_param)
+      render json:@team
     else
       render json:@team.errors
     end

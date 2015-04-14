@@ -6,8 +6,8 @@ class CreatePlayers < ActiveRecord::Migration
       t.string :lastname
       t.integer :salary
       t.integer :birthdate
-      t.integer :position
-      t.integer :status
+      t.integer :position,default:0
+      t.integer :status,default:0
       t.references :team, index: true
 
       t.timestamps null: false
